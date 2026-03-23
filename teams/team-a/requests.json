@@ -1,0 +1,53 @@
+[
+  {
+    "id": "a582071c-ab5c-4633-b986-728b54af9692",
+    "userRef": "user:default/mock-useruser:default/mock-user-1",
+    "entityRef": "component:default/test-app-1",
+    "permission": "edit",
+    "message": "I need to edit this for testing.",
+    "status": "approved",
+    "createdAt": "2026-03-11T19:27:27.212Z"
+  },
+  {
+    "id": "7adb28c2-c95d-4156-b4fd-7dd4be255a7e",
+    "userRef": "user:default/mock-useruser:default/mock-user-1",
+    "entityRef": "component:default/test-app-1",
+    "permission": "delete",
+    "message": "I dont like this",
+    "status": "declined",
+    "createdAt": "2026-03-11T19:56:28.195Z"
+  },
+  {
+    "id": "2bb1623b-c6ee-4cd7-9cd2-131dea4d595f",
+    "userRef": "user:default/audit-user",
+    "entityRef": "component:default/audit-app",
+    "permission": "deploy",
+    "message": "test audit fields",
+    "status": "approved",
+    "createdAt": "2026-03-12T01:29:36.895Z",
+    "actedBy": "user-a",
+    "actedAt": "2026-03-12T01:30:56.774Z"
+  },
+  {
+    "id": "dd97043c-3edb-4f90-b2f0-f2591a53b379",
+    "userRef": "user:default/mock-user",
+    "entityRef": "component:default/app-test",
+    "permission": "edit",
+    "message": "I want to  change this to make it  better",
+    "status": "declined",
+    "createdAt": "2026-03-13T13:56:54.931Z",
+    "actedBy": "user-a",
+    "actedAt": "2026-03-13T13:57:26.501Z"
+  },
+  {
+    "id": "7d79cd11-2193-4e23-b420-37cc90942f4b",
+    "userRef": "user:default/mock-user",
+    "entityRef": "component:test/test",
+    "permission": "read",
+    "message": "",
+    "status": "approved",
+    "createdAt": "2026-03-17T14:55:15.578Z",
+    "actedBy": "user-a",
+    "actedAt": "2026-03-17T14:55:57.311Z"
+  }
+]

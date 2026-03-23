@@ -1,0 +1,61 @@
+{
+  "roles": {
+    "developer": {
+      "API": [
+        "create",
+        "read",
+        "edit",
+        "delete"
+      ],
+      "App": [
+        "create",
+        "read",
+        "edit",
+        "delete",
+        "deploy"
+      ],
+      "Upload": [
+        "create",
+        "read",
+        "edit",
+        "delete"
+      ],
+      "Data": [
+        "create",
+        "read",
+        "edit",
+        "delete"
+      ],
+      "Deployment": [
+        "create",
+        "read",
+        "edit",
+        "delete"
+      ]
+    },
+    "basic": {
+      "API": [
+        "read"
+      ],
+      "App": [
+        "read"
+      ],
+      "Upload": [
+        "read"
+      ],
+      "Data": [
+        "read"
+      ],
+      "Deployment": [
+        "read"
+      ]
+    }
+  },
+  "group_roles": {
+    "group:default/team-a": "basic",
+    "group:default/team-a-developers": "developer",
+    "group:default/team-a-owners": "owner",
+    "group:default/team-b": "developer"
+  },
+  "user_roles": {}
+}

@@ -1,0 +1,101 @@
+{
+  "roles": {
+    "developer": {
+      "API": [
+        "create",
+        "read",
+        "edit",
+        "delete"
+      ],
+      "component:default/team-a-service": [
+        "read",
+        "edit"
+      ],
+      "App": [
+        "create",
+        "read",
+        "edit",
+        "delete",
+        "deploy"
+      ],
+      "Upload": [
+        "create",
+        "read",
+        "edit",
+        "delete"
+      ],
+      "Data": [
+        "create",
+        "read",
+        "edit",
+        "delete"
+      ],
+      "Deployment": [
+        "create",
+        "read",
+        "edit",
+        "delete"
+      ]
+    },
+    "basic": {
+      "API": [
+        "read"
+      ],
+      "App": [
+        "read"
+      ],
+      "Upload": [
+        "read"
+      ],
+      "Data": [
+        "read"
+      ],
+      "Deployment": [
+        "read"
+      ]
+    },
+    "req_accessor_a582071c": {
+      "component:default/test-app-1": [
+        "edit"
+      ]
+    },
+    "req_accessor_2bb1623b": {
+      "component:default/audit-app": [
+        "deploy"
+      ]
+    },
+    "req_accessor_7d79cd11": {
+      "component:test/test": [
+        "read"
+      ]
+    }
+  },
+  "group_roles": {
+    "group:default/team-a": [
+      "basic"
+    ],
+    "group:default/team-a-developers": [
+      "developer"
+    ],
+    "group:default/team-a-owners": [
+      "owner"
+    ],
+    "group:default/team-b": [
+      "developer"
+    ]
+  },
+  "user_roles": {
+    "user:default/user-a": [
+      "developer"
+    ],
+    "user:default/mock-useruser:default/mock-user-1": [
+      "req_accessor_a582071c"
+    ],
+    "user:default/audit-user": [
+      "req_accessor_2bb1623b"
+    ],
+    "user:default/mock-user": [
+      "req_accessor_7d79cd11"
+    ]
+  }
+}
