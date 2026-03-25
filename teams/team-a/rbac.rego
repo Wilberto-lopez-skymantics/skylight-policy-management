@@ -7,12 +7,12 @@ import data.teams.team_a.user_roles as team_user_roles
 default allow = false
 
 # Helper: Get all roles assigned to the user (via groups or directly)
-user_assigned_roles contains role if {
+user_assigned_roles[role] {
     some i, j
     group := input.claims.groups[i]
     role = team_group_roles[group][j]
 }
-user_assigned_roles contains role if {
+user_assigned_roles[role] {
     some j
     role = team_user_roles[input.userRef][j]
 }
@@ -26,7 +26,7 @@ requested_entity_ref = sprintf("%s:%s/%s", [
 ])
 
 # 1. Allow if the user has a role that grants the action on the specific Entity Reference
-allow if {
+allow {
     role := user_assigned_roles[_]
     role_perms := team_roles[role]
     requested_action := input.action
@@ -37,7 +37,7 @@ allow if {
 }
 
 # 2. Allow if the user has a role that grants the action on the broad Entity Type (e.g., "API")
-allow if {
+allow {
     role := user_assigned_roles[_]
     role_perms := team_roles[role]
     requested_action := input.action
