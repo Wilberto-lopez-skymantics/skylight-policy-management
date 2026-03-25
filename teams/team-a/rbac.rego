@@ -1,19 +1,20 @@
-package backstage.rbac
+package backstage.rbac.team_a
 
-# Native data mapping from data.json
+import data.teams.team_a.roles as team_roles
+import data.teams.team_a.group_roles as team_group_roles
+import data.teams.team_a.user_roles as team_user_roles
 
-# Default deny
 default allow = false
 
 # Helper: Get all roles assigned to the user (via groups or directly)
 user_assigned_roles[role] {
     some i, j
     group := input.claims.groups[i]
-    role = data.group_roles[group][j]
+    role = team_group_roles[group][j]
 }
 user_assigned_roles[role] {
     some j
-    role = data.user_roles[input.userRef][j]
+    role = team_user_roles[input.userRef][j]
 }
 
 # Helper: Construct the specific entity reference string
@@ -27,7 +28,7 @@ requested_entity_ref = sprintf("%s:%s/%s", [
 # 1. Allow if the user has a role that grants the action on the specific Entity Reference
 allow {
     role := user_assigned_roles[_]
-    role_perms := data.roles[role]
+    role_perms := team_roles[role]
     requested_action := input.action
     
     # Check if the role grants the action on the exact entity string
@@ -38,7 +39,7 @@ allow {
 # 2. Allow if the user has a role that grants the action on the broad Entity Type (e.g., "API")
 allow {
     role := user_assigned_roles[_]
-    role_perms := data.roles[role]
+    role_perms := team_roles[role]
     requested_action := input.action
     requested_type := input.entityType
     
