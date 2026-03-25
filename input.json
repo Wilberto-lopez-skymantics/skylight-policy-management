@@ -1,0 +1,1 @@
+{"userRef": "user:default/bob", "claims": {"groups": ["group:default/team-a", "group:default/team-a-developers"]}, "action": "deploy", "entityType": "App"}
