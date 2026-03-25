@@ -3,12 +3,14 @@ package backstage.rbac
 import data.backstage.rbac.team_a
 import data.backstage.rbac.team_b
 
-default allow = false
+import rego.v1
 
-allow {
+default allow := false
+
+allow if {
     team_a.allow
 }
 
-allow {
+allow if {
     team_b.allow
 }

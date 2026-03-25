@@ -7,12 +7,12 @@ import data.teams.team_b.user_roles as team_user_roles
 default allow = false
 
 # Helper: Get all roles assigned to the user (via groups or directly)
-user_assigned_roles[role] {
+user_assigned_roles contains role if {
     some i, j
     group := input.claims.groups[i]
     role := team_group_roles[group][j]
 }
-user_assigned_roles[role] {
+user_assigned_roles contains role if {
     some j
     role = team_user_roles[input.userRef][j]
 }
