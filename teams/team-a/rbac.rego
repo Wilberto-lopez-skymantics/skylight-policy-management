@@ -1,20 +1,32 @@
 package backstage.rbac.team_a
 
-import data.teams.team_a.roles as team_roles
-import data.teams.team_a.group_roles as team_group_roles
-import data.teams.team_a.user_roles as team_user_roles
+team_roles := data.teams["team-a"].roles
+team_group_roles := data.teams["team-a"].group_roles
+team_user_roles := data.teams["team-a"].user_roles
 
 default allow = false
 
 # Helper: Get all roles assigned to the user (via groups or directly)
 user_assigned_roles[role] {
-    some i, j
+    some i, j, k
     group := input.claims.groups[i]
-    role = team_group_roles[group][j]
+    group_name := split(group, "/")[1]
+    
+    stored_group := [key | _ = team_group_roles[key]][j]
+    stored_group_name := split(stored_group, "/")[1]
+    
+    group_name == stored_group_name
+    role = team_group_roles[stored_group][k]
 }
 user_assigned_roles[role] {
-    some j
-    role = team_user_roles[input.userRef][j]
+    some j, k
+    user_name := split(input.userRef, "/")[1]
+    
+    stored_user := [key | _ = team_user_roles[key]][j]
+    stored_user_name := split(stored_user, "/")[1]
+    
+    user_name == stored_user_name
+    role = team_user_roles[stored_user][k]
 }
 
 # Helper: Construct the specific entity reference string
@@ -51,7 +63,7 @@ allow {
 
 # 3. Allow if user belongs to the group that owns the entity
 allow {
-    user_groups := input.claims.groups
+    user_group := input.claims.groups[_]
     entity_owner := input.entity.spec.owner
-    entity_owner == user_groups[_]
+    split(user_group, "/")[1] == split(entity_owner, "/")[1]
 }
