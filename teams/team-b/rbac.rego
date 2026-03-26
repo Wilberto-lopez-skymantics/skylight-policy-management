@@ -1,74 +1,63 @@
 package backstage.rbac.team_b
 
-team_roles := data.teams["team-b"].roles
 team_group_roles := data.teams["team-b"].group_roles
-team_user_roles := data.teams["team-b"].user_roles
+team_user_roles  := data.teams["team-b"].user_roles
+team_roles       := data.teams["team-b"].roles
 
 default allow = false
 
-# Helper: Get all roles assigned to the user (via groups or directly)
-user_assigned_roles[role] {
-    some i, j, k
-    group := input.claims.groups[i]
+# Allow if user's group (by name, ignoring namespace) has a role that allows the action on the entity type
+allow {
+    group := input.claims.groups[_]
     group_name := split(group, "/")[1]
-    
-    stored_group := [key | _ = team_group_roles[key]][j]
-    stored_group_name := split(stored_group, "/")[1]
-    
-    group_name == stored_group_name
-    role = team_group_roles[stored_group][k]
+
+    team_group_roles[key]
+    split(key, "/")[1] == group_name
+
+    role := team_group_roles[key][_]
+    actions := team_roles[role][input.entityType]
+    input.action == actions[_]
 }
-user_assigned_roles[role] {
-    some j, k
+
+# Allow if user's group has a role that allows the action on the specific entity ref
+allow {
+    group := input.claims.groups[_]
+    group_name := split(group, "/")[1]
+
+    team_group_roles[key]
+    split(key, "/")[1] == group_name
+
+    role := team_group_roles[key][_]
+    ref := sprintf("%s:%s/%s", [
+        lower(input.entity.kind),
+        input.entity.metadata.namespace,
+        input.entity.metadata.name
+    ])
+    actions := team_roles[role][ref]
+    input.action == actions[_]
+}
+
+# Allow if user directly has a role that allows the action on the entity type
+allow {
     user_name := split(input.userRef, "/")[1]
-    
-    stored_user := [key | _ = team_user_roles[key]][j]
-    stored_user_name := split(stored_user, "/")[1]
-    
-    user_name == stored_user_name
-    role = team_user_roles[stored_user][k]
+
+    team_user_roles[key]
+    split(key, "/")[1] == user_name
+
+    role := team_user_roles[key][_]
+    actions := team_roles[role][input.entityType]
+    input.action == actions[_]
 }
 
-# Helper: Construct the specific entity reference string
-# Example: "component:default/team-a-service"
-requested_entity_ref := sprintf("%s:%s/%s", [
-    lower(input.entity.kind), 
-    input.entity.metadata.namespace, 
-    input.entity.metadata.name
-])
-
-# 1. Allow if the user has a role that grants the action on the specific Entity Reference
+# Allow if user belongs to the owning group (namespace-agnostic)
 allow {
-    role := user_assigned_roles[_]
-    role_perms := team_roles[role]
-    requested_action := input.action
-    
-    # Check if the role grants the action on the exact entity string
-    entity_actions := role_perms[requested_entity_ref]
-    requested_action == entity_actions[_]
+    group := input.claims.groups[_]
+    owner := input.entity.spec.owner
+    split(group, "/")[1] == split(owner, "/")[1]
 }
 
-# 2. Allow if the user has a role that grants the action on the broad Entity Type (e.g., "API")
-allow {
-    role := user_assigned_roles[_]
-    role_perms := team_roles[role]
-    requested_action := input.action
-    requested_type := input.entityType
-    
-    # Check if the role grants the action broadly on the kind
-    type_actions := role_perms[requested_type]
-    requested_action == type_actions[_]
-}
-
-# 3. Specific Allow for Owners subgroup (can do everything)
+# Allow owners subgroup unconditionally
 allow {
     group := input.claims.groups[_]
     endswith(group, "-owners")
-}
-
-# 4. Allow if user belongs to the group that owns the entity
-allow {
-    user_group := input.claims.groups[_]
-    entity_owner := input.entity.spec.owner
-    split(user_group, "/")[1] == split(entity_owner, "/")[1]
 }
