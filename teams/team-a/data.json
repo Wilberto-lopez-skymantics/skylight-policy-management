@@ -42,7 +42,8 @@
         "read"
       ],
       "App": [
-        "read"
+        "read",
+        "deploy"
       ],
       "Upload": [
         "read"
