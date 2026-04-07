@@ -69,6 +69,24 @@
       "component:test/test": [
         "read"
       ]
+    },
+    "test": {
+      "Deployment": [
+        "read",
+        "deploy"
+      ],
+      "Data": [
+        "read"
+      ],
+      "Upload": [
+        "read"
+      ],
+      "App": [
+        "read"
+      ],
+      "API": [
+        "read"
+      ]
     }
   },
   "group_roles": {
